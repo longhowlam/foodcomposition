@@ -4,34 +4,37 @@ library(purrr)
 library(tibble)
 library(dplyr)
 
-mykey = "fY3aMpfVj2FE8nTEVQWPoP09Xs7dngEVvrLZKUh2"
+mykey = readRDS("mykey.RDS")
+foodURL =  "https://api.nal.usda.gov/ndb/search"
+nutrientsURL =  "https://api.nal.usda.gov/ndb/reports/"
 
 ##########  search API to retrieve ndbno's ###############################
 
-foodURL =  "https://api.nal.usda.gov/ndb/search"
-searchq =  "mcDonald"
+searchFood = function(searchq){
 
-searchout  = GET(
-  url = foodURL,
-  query = list(
-    api_key = mykey ,
-    format = "json",
-    q = searchq
-  )
-) %>% 
+  searchout  = GET(
+    url = foodURL,
+    query = list(
+      api_key = mykey ,
+      format = "json",
+      q = searchq
+    )
+  ) %>% 
   content()
 
-## in search out there is a list with search results
-## we return it as data frame per componenet using purrr
+  ## in search out there is a list with search results
+  ## we return it as data frame per componenet using purrr
 
-mcdonalds = map_df(searchout[["list"]][["item"]], as.tibble)
+  map_df(searchout[["list"]][["item"]], as.tibble)
+}
+
+mcdonalds = searchFood(searchq = "mcdonald")
 
 
 ############################ food nutrient report for one ndbno ##############################
 ndbno_in = 21238
 getnutr_values = function(ndbno_in)
 {
-  nutrientsURL =  "https://api.nal.usda.gov/ndb/reports/"
 
   ntr = GET(
     url = nutrientsURL,
