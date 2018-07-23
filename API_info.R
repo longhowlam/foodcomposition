@@ -61,4 +61,4 @@ getnutr_values(21238)
 mcdonalds_nutr = map_df( mcdonalds$ndbno, getnutr_values) %>%  distinct()
 
 
-mcdondalds_nutr %>% group_by(ndbno) %>%  summarise(n=n())
+mcdonalds_nutr %>% group_by(ndbno) %>%  summarise(n=n())
