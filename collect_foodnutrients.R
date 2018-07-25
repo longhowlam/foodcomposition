@@ -24,7 +24,12 @@ Beef = searchFood(fg = "Beef Products") %>%
 Poultry = searchFood(fg = "Poultry Products") %>% 
   transpose_nutrients()
 
+DairyEggs = searchFood(fg = "Dairy and Egg Products") %>% 
+  transpose_nutrients()
+
+
+
 food = bind_rows(
-  mcdonalds, pizzahut, Veggies, Fruits, Fish, Pork, Beef, Poultry
+  mcdonalds, pizzahut, Veggies, Fruits, Fish, Pork, Beef, Poultry, DairyEggs
 ) %>% 
   mutate_if(is.numeric, function(x){ifelse(is.na(x),0,x)})

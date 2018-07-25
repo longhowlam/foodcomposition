@@ -12,7 +12,7 @@ nutrientsURL =  "https://api.nal.usda.gov/ndb/reports/"
 
 ##########  search API to retrieve ndbno's ###############################
 searchq = "raw broccoli"
-searchFood = function(searchq = "", fg = "", maxr = 100){
+searchFood = function(searchq = "", fg = "", maxr = 200){
 
   searchout  = GET(
     url = foodURL,

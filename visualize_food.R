@@ -13,9 +13,9 @@ use_condaenv(condaenv = "test_lhl")
 umap = import("umap")
 
 embedding = umap$UMAP(
-  n_neighbors = 5L,
+  n_neighbors = 10L,
   n_components = 2L,
-  min_dist = 0.51
+  min_dist = 0.6
 )
 
 ## compute UMAP with 3 components
@@ -32,8 +32,10 @@ plot_ly(
   y = ~X2, 
   color = ~group,
   text = ~naam,
-  size = 3, sizes = c(5,10) 
-) 
+  sizes = 10 
+) %>% 
+  layout(title = "Different food in 2 dimensions using UMAP")
+
 
 
 ############# plot using truncated SVD ######################
