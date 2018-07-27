@@ -3,11 +3,10 @@
 library(reticulate)
 library(dplyr)
 library(plotly)
-library(irlba)
+library(umap)
+library(stringr)
 
 ##### umap package is in test_lhl conda environment ###########################
-## remove the vgg_notop object, for some reason it points to 
-## conda r-tensorflow env where there is no umpa module
 
 use_condaenv(condaenv = "test_lhl")
 umap = import("umap")
@@ -18,7 +17,7 @@ embedding = umap$UMAP(
   min_dist = 0.6
 )
 
-## compute UMAP with 3 components
+## compute UMAP with k components
 M = as.matrix(food %>% select(-naam, -ndbno, - group ))
 embedding_out = embedding$fit_transform(M)
 
@@ -31,10 +30,33 @@ plot_ly(
   x = ~X1,
   y = ~X2, 
   color = ~group,
-  text = ~naam,
-  sizes = 10 
+  text = ~naam
 ) %>% 
-  layout(title = "Different food in 2 dimensions using UMAP")
+  layout(title = "For 1400 food products the 33 dimensional nutrient values projected onto 2 dimensions using UMAP")
+
+######### R implementation, which is much slower but has no external dependencies ##########################
+custom.config = umap.defaults
+custom.config$n_neighbors = 10
+custom.config$min_dist = 0.6
+
+umapfit = umap(M, custom.config)
+embedding_out = umapfit$layout
+
+### given an embedding you can score new food products on this embedding
+cucumber = food %>% 
+  filter( str_detect(naam, "Cucumber" )) %>% 
+  select(-naam, -ndbno, - group ) %>% 
+  as.matrix()
+cucumber_umap = predict(umapfit, cucumber)
+head(iris.wnoise.umap, 3)
+
+
+
+
+
+
+
+
 
 
 
